@@ -164,6 +164,7 @@ func checkPairs() {
 
 			// 两边一起失败，则放弃
 			if pair.SpotQty == 0 && pair.FutureQty == 0 {
+				grid.OpenChance++
 				delete(grid.OpenPairs, uid)
 			}
 
@@ -203,6 +204,7 @@ func checkPairs() {
 
 			// 两边一起失败，则放弃
 			if pair.SpotQty == 0 && pair.FutureQty == 0 {
+				grid.CloseChance++
 				delete(grid.ClosePairs, uid)
 			}
 
