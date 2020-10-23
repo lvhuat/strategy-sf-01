@@ -52,7 +52,7 @@ func check() bool {
 			persistGrids()
 
 			place(pair.Spot.ClientId, spotName, "buy", 0, "market", qty, false, false)
-			place(pair.Spot.ClientId, futureName, "sell", 0, "market", qty, false, false)
+			place(pair.Future.ClientId, futureName, "sell", 0, "market", qty, false, false)
 			orderMap.add(pair.Future)
 			orderMap.add(pair.Spot)
 
@@ -68,7 +68,7 @@ func check() bool {
 			persistGrids()
 
 			place(pair.Spot.ClientId, spotName, "sell", 0, "market", qty, false, false)
-			place(pair.Spot.ClientId, futureName, "buy", 0, "market", qty, false, false)
+			place(pair.Future.ClientId, futureName, "buy", 0, "market", qty, false, false)
 			orderMap.add(pair.Future)
 			orderMap.add(pair.Spot)
 
