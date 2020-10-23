@@ -59,7 +59,7 @@ func check() bool {
 			changed = true
 		}
 
-		// 处罚平
+		// 触发平
 		if close <= grid.CloseAt && grid.CloseChance > 0 {
 			qty := grid.PlaceQty
 			pair := NewHedgePair(grid, false, qty)
@@ -140,8 +140,8 @@ func onRejectOrder(clientId string) {
 		pair.Spot.Closed = true
 		pair.Spot.FinishAt = time.Now()
 	case pair.Future.ClientId == clientId:
-		pair.Spot.Closed = true
-		pair.Spot.FinishAt = time.Now()
+		pair.Future.Closed = true
+		pair.Future.FinishAt = time.Now()
 	}
 
 	orderMap.remove(clientId)
@@ -169,7 +169,7 @@ func checkPairs() {
 
 			pair.RetryPlace++
 			// 现货补单
-			if pair.SpotQty != pair.TargetQty { // pair.Spot = nil
+			if pair.SpotQty != pair.TargetQty {
 				pair.Spot = &GridOrder{
 					ClientId: uuid.New().String(),
 					Qty:      pair.TargetQty - pair.SpotQty,
@@ -191,7 +191,7 @@ func checkPairs() {
 				}
 				persistGrids()
 				orderMap.add(pair.Future)
-				place(pair.Spot.ClientId, spotName, "sell", 0, "market", pair.Spot.Qty, false, false)
+				place(pair.Future.ClientId, futureName, "sell", 0, "market", pair.Future.Qty, false, false)
 			}
 		}
 
@@ -203,7 +203,7 @@ func checkPairs() {
 
 			// 两边一起失败，则放弃
 			if pair.SpotQty == 0 && pair.FutureQty == 0 {
-				delete(grid.OpenPairs, uid)
+				delete(grid.ClosePairs, uid)
 			}
 
 			// 重试超过5次，则放弃
@@ -235,7 +235,7 @@ func checkPairs() {
 				}
 				persistGrids()
 				orderMap.add(pair.Future)
-				place(pair.Spot.ClientId, spotName, "buy", 0, "market", pair.Spot.Qty, false, false)
+				place(pair.Future.ClientId, futureName, "buy", 0, "market", pair.Future.Qty, false, false)
 			}
 		}
 	}
